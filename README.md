@@ -190,11 +190,11 @@ For installation troubleshooting tips, please refer [Troubleshooting guide](DEBU
 
 #### To deploy to IBM Cloud
 
-[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/qradar-monitor-device-events/java&branch=master)
+[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/qradar-monitor-device-events.git)
 
 #### To run the web application locally
 
-* Clone this [git repo](https://github.com/IBM/qradar-monitor-device-events).
+* Clone this [git repo](https://github.com/IBM/qradar-monitor-device-events.git).
 * Go to directory `java`.
   ```
      cd java
