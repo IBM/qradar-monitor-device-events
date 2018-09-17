@@ -1,6 +1,0 @@
-  applications:
-   - name: WatsonIoTQRadarIntegration
-     random-route: true
-     path: target/WatsonIoTQRadarIntegration
-     memory: 512M
-     instances: 1
