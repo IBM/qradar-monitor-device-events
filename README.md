@@ -46,6 +46,7 @@ The following aspects will be demonstrated in this pattern:
 * [IBM QRadar version 7.3.1](https://developer.ibm.com/qradar/ce/): QRadar Community Edition is a free version of QRadar that is based off of the core enterprise SIEM. 
 
 * [Syslog Java Client](https://github.com/CloudBees-community/syslog-java-client): Client library written in Java to send messages to a Syslog server from CloudBees community(https://github.com/CloudBees-community).
+> Note: Please read the licensing terms for usage of the Syslog Java Client at - https://github.com/CloudBees-community/syslog-java-client. It is downloaded as part of the maven build in this code pattern.
 
 ## Featured Technologies
 
