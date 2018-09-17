@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Enter device details</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	<style>
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 10px;
+}
+
+button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+</style>
+</head>
+<body>
+	<h1>Enter details of the device to be monitored using QRadar</h1>
+	<div ng-app="App1" ng-controller="App1Controller">
+		<form>
+		<table >
+		<tr>
+			<td>
+				Device Type:</td><td> <input type="text" ng-model="deviceType">
+			</td>
+			</tr>
+			<tr>
+			<td>
+				Device ID: </td><td><input type="text" ng-model="deviceId">
+			</td>
+			</tr>
+			<br/>
+			<tr>
+			<td></td>
+			<td><button ng-click="SendData()">Submit</button></td>
+			</tr>
+			</table>
+			{{ PostDataResponse }}
+			<br/>
+			<div><button ng-click="next()">Next ></button></div>
+		</form>
+	</div>
+
+	<script>
+	angular.module("App1", [])
+    .controller("App1Controller", function($scope, $http) {
+     
+    $scope.SendData = function(item, event) {
+      console.log("--> Submitting form");
+      alert($scope.deviceId);
+      var dataObject = {
+         deviceId : $scope.deviceId,
+         deviceType  : $scope.deviceType
+      };
+      alert(JSON.stringify(dataObject));
+      $http({
+    	  method: 'POST',
+    	  url: '/WatsonIoTQRadarIntegration/ConnectWatsonIoTQRadar',
+    	  data: dataObject
+    	}).then(function successCallback(response) {
+    		 $scope.PostDataResponse = response;
+    	  }, function errorCallback(response) {
+    		  alert("Submitting form failed!");
+    		  alert(JSON.stringify(response))
+    	      $scope.PostDataResponse = JSON.stringify(response);
+    	  });
+     
+    }
+    
+    $scope.next = function(){   
+        window.location = ('/WatsonIoTQRadarIntegration/simulate.html');
+    }
+
+ });
+	</script>
+</body>
+</html>

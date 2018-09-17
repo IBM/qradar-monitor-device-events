@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Simulate WIoTP events</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	<style>
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 10px;
+}
+
+button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+</style>
+	
+</head>
+<body>
+	<h1>Simulate WIoTP events</h1>
+
+	<div ng-app="App1" ng-controller="App1Controller">
+		<form>
+		<table>
+		<tr>
+			<td>
+				Device ID: </td><td><input type="text" ng-model="deviceId">
+			</td>
+			</tr>
+			<tr>
+			<td>
+				Device Type:</td><td> <input type="text" ng-model="deviceType">
+			</td>		
+		</tr>
+			<tr>
+			<td>
+				Organization: </td><td><input type="text" ng-model="org">
+			</td>
+			</tr>
+			<tr>
+			<td>
+				Auth Method: </td><td><input type="text" ng-model="authmethod">
+			</td>
+			</tr>
+			<tr>
+			<td>
+				Auth Token: </td><td><input type="text" ng-model="authtoken">
+			</td>
+			</tr>
+			<tr>
+			<td>
+				Event (Enter in JSON format): </td><td><textarea rows="10" ng-model="event"></textarea>
+			</td>
+			</tr>
+			
+			</table>
+			<br/>
+			<div><button ng-click="SendData()">Send</button>
+			</div>
+			<div>{{ PostDataResponse }}</div>
+		</form>
+	</div>
+
+	<script>
+	angular.module("App1", [])
+    .controller("App1Controller", function($scope, $http) {
+     
+    $scope.SendData = function(item, event) {
+      console.log("--> Submitting form");
+      var evt = JSON.parse($scope.event)
+      var dataObject = {
+         "deviceType" : $scope.deviceType,
+         "deviceId"  : $scope.deviceId,
+         "org" : $scope.org,
+         "authmethod" : $scope.authmethod,
+         "authtoken" : $scope.authtoken,
+         "event" : evt
+      };
+      $http({
+    	  method: 'POST',
+    	  url: '/WatsonIoTQRadarIntegration/SimulateEvent',
+    	  data: dataObject
+    	}).then(function successCallback(response) {
+    		 $scope.PostDataResponse = response;
+    	  }, function errorCallback(response) {
+    		  alert("Submitting form failed!");
+    		  alert(JSON.stringify(response))
+    	      $scope.PostDataResponse = JSON.stringify(response);
+    	  });
+     
+    }
+    
+  
+
+ });
+	</script>
+</body>
+</html>
