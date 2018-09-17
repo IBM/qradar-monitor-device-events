@@ -195,10 +195,7 @@ For installation troubleshooting tips, please refer [Troubleshooting guide](DEBU
 #### To run the web application locally
 
 * Clone this [git repo](https://github.com/IBM/qradar-monitor-device-events.git).
-* Go to directory `java`.
-  ```
-     cd java
-  ```   
+
 * Run the command `mvn clean package`.
   ```
      mvn clean package
