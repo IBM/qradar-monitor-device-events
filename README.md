@@ -1,4 +1,4 @@
-# Monitor device events using QRadar for violations
+# Monitor device events using QRadar 
 > **Note:** The approach used in this code pattern can be used to add any log source not already supported by QRadar out of the box.
 
 Monitoring and preventing security or policy related incidents is an important goal for any organization. Some examples of such incidents are:
