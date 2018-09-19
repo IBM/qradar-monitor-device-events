@@ -1,7 +1,6 @@
-  applications:
-   - name: WatsonIoTQRadarIntegration
-     random-route: false
-     path: .
-     memory: 512M
-     instances: 1
-     buildpack: liberty-for-java
+ ---
+applications:
+- name: QRadarIoTIntegration
+  random-route: true
+  memory: 256M
+  path: target/WatsonIoTQRadarIntegration.war
