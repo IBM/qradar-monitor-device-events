@@ -1,26 +1,46 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>net.wasdev.maven.parent</groupId>
+		<artifactId>java7-parent</artifactId>
+		<version>1.4</version>
+		<relativePath></relativePath>
+	</parent>
+
 	<groupId>WatsonIoTQRadarIntegration</groupId>
 	<artifactId>WatsonIoTQRadarIntegration</artifactId>
 	<version>1.0</version>
 	<packaging>war</packaging>
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<configuration>
+						<failOnMissingWebXml>false</failOnMissingWebXml>
+						<warSourceDirectory>WebContent</warSourceDirectory>
+						<warName>WatsonIoTQRadarIntegration</warName>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>net.wasdev.wlp.maven.plugins</groupId>
+					<artifactId>liberty-maven-plugin</artifactId>
+					<version>1.2.1</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
+				<groupId>net.wasdev.wlp.maven.plugins</groupId>
+				<artifactId>liberty-maven-plugin</artifactId>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>3.0.0</version>
-				<configuration>
-					<warSourceDirectory>WebContent</warSourceDirectory>
+					<configFile>src/main/wlp/server.xml</configFile>
+					<bootstrapProperties>
+						<appLocation>../../../../../${project.build.finalName}</appLocation>
+					</bootstrapProperties>
 				</configuration>
 			</plugin>
 		</plugins>
