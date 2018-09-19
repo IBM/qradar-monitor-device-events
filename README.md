@@ -200,10 +200,7 @@ For installation troubleshooting tips, please refer [Troubleshooting guide](DEBU
   ```
      mvn clean package
   ```   
-* The war file is generated in the target directory - `WatsonIoTQRadarIntegration-1.0.war`. 
-  
-* Rename the war file to `WatsonIoTQRadarIntegration.war`.
-> Note: The war file name is part of the context which is hardcoded in the html files. Hence this renaming is important for the code to work.
+* The war file is generated in the target directory - `WatsonIoTQRadarIntegration.war`. 
 
 * Deploy the war file into Apache Tomcat container.
 
