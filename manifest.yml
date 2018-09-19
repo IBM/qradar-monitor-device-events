@@ -4,5 +4,4 @@
      path: .
      memory: 512M
      instances: 1
-  buildpacks: 
-   - liberty-for-java
+     buildpack: java_buildpack
