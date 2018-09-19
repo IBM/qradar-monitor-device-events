@@ -4,3 +4,5 @@
      path: .
      memory: 512M
      instances: 1
+  buildpacks: 
+   - https://github.com/cloudfoundry/java-buildpack.git
