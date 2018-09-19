@@ -57,7 +57,7 @@ The following aspects will be demonstrated in this pattern:
 * [Java](https://en.wikipedia.org/wiki/Java_(programming_language)): Java is a general-purpose computer-programming language that is concurrent, class-based and object-oriented.
 
 ## Watch the Video
-[![](https://img.youtube.com/vi/ihqlBHqkGD0/0.jpg)](https://youtu.be/ihqlBHqkGD0)
+[![](https://img.youtube.com/vi/ihqlBHqkGD0/1.jpg)](https://youtu.be/ihqlBHqkGD0)
 
 ## Pre-requisites
 * [QRadar Community edition](https://developer.ibm.com/qradar/ce/) : Please visit the site for download and installation instructions.
