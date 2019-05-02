@@ -1,11 +1,11 @@
-package org.sample.config;
+package org.example.config;
 
 import java.util.Properties;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.sample.handlers.IoTEventCallback;
-import org.sample.handlers.IoTStatusCallback;
+import org.example.handlers.IoTEventCallback;
+import org.example.handlers.IoTStatusCallback;
 
 import com.ibm.iotf.client.app.ApplicationClient;
 

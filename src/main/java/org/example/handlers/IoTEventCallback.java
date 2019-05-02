@@ -11,13 +11,13 @@
  *  limitations under the License.
  */ 
 
-package org.sample.handlers;
+package org.example.handlers;
 
 import java.io.IOException;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.sample.config.QRadarConfig;
+import org.example.config.QRadarConfig;
 
 import com.cloudbees.syslog.Facility;
 import com.cloudbees.syslog.MessageFormat;

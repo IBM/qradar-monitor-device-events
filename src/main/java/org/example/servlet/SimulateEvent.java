@@ -11,9 +11,10 @@
  *  limitations under the License.
  */ 
 
-package org.sample.servlet;
+package org.example.servlet;
 
 import java.io.IOException;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,13 +25,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
-import org.sample.config.IoTConfig;
+
+import com.ibm.iotf.client.device.DeviceClient;
 
 /**
- * Servlet implementation class ConfigureIoTSubscriber
+ * Servlet implementation class SimulateEvent
  */
-@WebServlet("/ConfigureIoTSubscriber")
-public class ConfigureIoTSubscriber extends HttpServlet {
+@WebServlet("/SimulateEvent")
+public class SimulateEvent extends HttpServlet {
 	/**
 	 * @author bkadambi
 	 * 
@@ -40,7 +42,7 @@ public class ConfigureIoTSubscriber extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public ConfigureIoTSubscriber() {
+	public SimulateEvent() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -51,31 +53,56 @@ public class ConfigureIoTSubscriber extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		response.setContentType("application/json");
-		setAccessControlHeaders(response);
+
 		try {
+			response.setContentType("application/json");
+			setAccessControlHeaders(response);
 			StringBuilder sb = new StringBuilder();
 			String s;
 			while ((s = request.getReader().readLine()) != null) {
 				sb.append(s);
 			}
-			Logger.getLogger(getServletName()).log(Level.INFO,"Received configuration - " + sb.toString());
+			Logger.getLogger(getServletName()).log(Level.INFO,
+					"Publishing event to Watson IoT platform - " + sb.toString());
 			JSONObject req = new JSONObject(sb.toString());
-			// {"apikey":"","apitoken":"","org":""}
-			String apikey = req.getString("apikey");
-			String token = req.getString("apitoken");
+			System.out.println(sb.toString());
+
 			String org = req.getString("org");
-			IoTConfig.apikey = apikey;
-			IoTConfig.token = token;
-			IoTConfig.org = org;
-			IoTConfig.buildIoTAppProps();
+			String deviceType = req.getString("deviceType");
+			String id = req.getString("deviceId");
+			String auth_method = req.getString("authmethod");
+			String auth_token = req.getString("authtoken");
+
+			Properties options = new Properties();
+			
+			options.setProperty("org", org);
+			options.setProperty("type", deviceType);
+			options.setProperty("id", id);
+			options.setProperty("auth-method", auth_method);
+			options.setProperty("auth-token", auth_token);
+			
+
+			DeviceClient client = new DeviceClient(options);
+
+			JSONObject event = req.getJSONObject("event");
+			System.out.println(event);
+
+			client.connect();
+			System.out.println("Client connected");
+
+			client.publishEvent("security", event, 1);
+
+			//client.disconnect();
+
+			JSONObject res = new JSONObject();
+			res.put("response", "Event publish success! - " + event);
+			client.disconnect();
+			response.getWriter().append(res.toString());
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		JSONObject res = new JSONObject();
-		Logger.getLogger(getServletName()).log(Level.INFO,"Applied IoT configuration.");
-		res.put("response", "Applied IoT Configuration Successfully");
-		response.getWriter().append(res.toString());
+
 	}
 
 	/**
@@ -92,4 +119,5 @@ public class ConfigureIoTSubscriber extends HttpServlet {
 		resp.setHeader("Access-Control-Allow-Origin", "*");
 		resp.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
 	}
+
 }

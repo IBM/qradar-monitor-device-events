@@ -1,4 +1,4 @@
-package org.sample.config;
+package org.example.config;
 
 public class QRadarConfig {
 	

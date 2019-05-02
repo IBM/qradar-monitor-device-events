@@ -11,10 +11,9 @@
  *  limitations under the License.
  */ 
 
-package org.sample.servlet;
+package org.example.servlet;
 
 import java.io.IOException;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,36 +23,36 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.example.config.IoTConfig;
+import org.example.handlers.IoTEventCallback;
+import org.example.handlers.IoTStatusCallback;
 import org.json.JSONObject;
 
-import com.ibm.iotf.client.device.DeviceClient;
+import com.ibm.iotf.client.app.ApplicationClient;
 
 /**
- * Servlet implementation class SimulateEvent
+ * Servlet implementation class ConnectWatsonIoTQRadar
  */
-@WebServlet("/SimulateEvent")
-public class SimulateEvent extends HttpServlet {
+@WebServlet("/ConnectWatsonIoTQRadar")
+public class ConnectWatsonIoTQRadar extends HttpServlet {
 	/**
 	 * @author bkadambi
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ConnectWatsonIoTQRadar() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
 	/**
-	 * @see HttpServlet#HttpServlet()
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	public SimulateEvent() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			response.setContentType("application/json");
 			setAccessControlHeaders(response);
@@ -62,55 +61,34 @@ public class SimulateEvent extends HttpServlet {
 			while ((s = request.getReader().readLine()) != null) {
 				sb.append(s);
 			}
-			Logger.getLogger(getServletName()).log(Level.INFO,
-					"Publishing event to Watson IoT platform - " + sb.toString());
+			Logger.getLogger(getServletName()).log(Level.INFO,"Connecting Watson IoT to QRadar with - " + sb.toString());
 			JSONObject req = new JSONObject(sb.toString());
-			System.out.println(sb.toString());
-
-			String org = req.getString("org");
+			//{"deviceId":"","deviceType":""}
+			String deviceId = req.getString("deviceId");
 			String deviceType = req.getString("deviceType");
-			String id = req.getString("deviceId");
-			String auth_method = req.getString("authmethod");
-			String auth_token = req.getString("authtoken");
-
-			Properties options = new Properties();
 			
-			options.setProperty("org", org);
-			options.setProperty("type", deviceType);
-			options.setProperty("id", id);
-			options.setProperty("auth-method", auth_method);
-			options.setProperty("auth-token", auth_token);
-			
-
-			DeviceClient client = new DeviceClient(options);
-
-			JSONObject event = req.getJSONObject("event");
-			System.out.println(event);
-
+			ApplicationClient client = new ApplicationClient(IoTConfig.iotprops);
+			IoTEventCallback evtBack = new IoTEventCallback();
+			client.setEventCallback(evtBack);
+			client.setStatusCallback(new IoTStatusCallback());
 			client.connect();
-			System.out.println("Client connected");
-
-			client.publishEvent("security", event, 1);
-
-			//client.disconnect();
-
+			client.subscribeToDeviceEvents("Vehicle", "Truck_7265", "security", "json", 1);
+			client.subscribeToDeviceStatus();
+			Logger.getLogger(getServletName()).log(Level.INFO,"Subscribing to device events! " + sb.toString());
 			JSONObject res = new JSONObject();
-			res.put("response", "Event publish success! - " + event);
-			client.disconnect();
+	        res.put("response", "Successfully connected Watson IoT to QRadar!" + sb.toString());
 			response.getWriter().append(res.toString());
-
-		} catch (Exception e) {
+			
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 		}
-
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
@@ -119,5 +97,4 @@ public class SimulateEvent extends HttpServlet {
 		resp.setHeader("Access-Control-Allow-Origin", "*");
 		resp.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
 	}
-
 }
