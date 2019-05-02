@@ -11,7 +11,7 @@
  *  limitations under the License.
  */ 
 
-package org.sample.handlers;
+package org.example.handlers;
 
 import com.ibm.iotf.client.app.ApplicationStatus;
 import com.ibm.iotf.client.app.DeviceStatus;

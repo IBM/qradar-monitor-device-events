@@ -11,7 +11,7 @@
  *  limitations under the License.
  */ 
 
-package org.sample.servlet;
+package org.example.servlet;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -23,18 +23,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.example.config.QRadarConfig;
 import org.json.JSONObject;
-import org.sample.config.IoTConfig;
-import org.sample.handlers.IoTEventCallback;
-import org.sample.handlers.IoTStatusCallback;
-
-import com.ibm.iotf.client.app.ApplicationClient;
 
 /**
- * Servlet implementation class ConnectWatsonIoTQRadar
+ * Servlet implementation class ConfigureQRadarClient
  */
-@WebServlet("/ConnectWatsonIoTQRadar")
-public class ConnectWatsonIoTQRadar extends HttpServlet {
+@WebServlet("/ConfigureQRadarClient")
+public class ConfigureQRadarClient extends HttpServlet {
 	/**
 	 * @author bkadambi
 	 * 
@@ -44,7 +40,7 @@ public class ConnectWatsonIoTQRadar extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ConnectWatsonIoTQRadar() {
+    public ConfigureQRadarClient() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -53,36 +49,31 @@ public class ConnectWatsonIoTQRadar extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("application/json");
+		setAccessControlHeaders(response);
 		try {
-			response.setContentType("application/json");
-			setAccessControlHeaders(response);
 			StringBuilder sb = new StringBuilder();
 			String s;
 			while ((s = request.getReader().readLine()) != null) {
 				sb.append(s);
 			}
-			Logger.getLogger(getServletName()).log(Level.INFO,"Connecting Watson IoT to QRadar with - " + sb.toString());
+			System.out.println("Received onfiguration:"+sb.toString());
+			Logger.getLogger(getServletName()).log(Level.INFO,"Received configuration - " + sb.toString());
 			JSONObject req = new JSONObject(sb.toString());
-			//{"deviceId":"","deviceType":""}
-			String deviceId = req.getString("deviceId");
-			String deviceType = req.getString("deviceType");
-			
-			ApplicationClient client = new ApplicationClient(IoTConfig.iotprops);
-			IoTEventCallback evtBack = new IoTEventCallback();
-			client.setEventCallback(evtBack);
-			client.setStatusCallback(new IoTStatusCallback());
-			client.connect();
-			client.subscribeToDeviceEvents("Vehicle", "Truck_7265", "security", "json", 1);
-			client.subscribeToDeviceStatus();
-			Logger.getLogger(getServletName()).log(Level.INFO,"Subscribing to device events! " + sb.toString());
+			// {"ip":"","msgfmt":""}
+			String ipaddress = req.getString("ip");
+			String format = req.getString("msgfmt");
+			QRadarConfig.IP_ADDRESS = ipaddress;
+			QRadarConfig.MSG_FORMAT=format;
 			JSONObject res = new JSONObject();
-	        res.put("response", "Successfully connected Watson IoT to QRadar!" + sb.toString());
+			res.put("response","Configured QRadar : " +req.toString());
 			response.getWriter().append(res.toString());
-			
 		} catch (Exception e)
 		{
 			e.printStackTrace();
 		}
+		
+		
 	}
 
 	/**

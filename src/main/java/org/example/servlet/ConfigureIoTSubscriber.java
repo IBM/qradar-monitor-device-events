@@ -11,7 +11,7 @@
  *  limitations under the License.
  */ 
 
-package org.sample.servlet;
+package org.example.servlet;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -23,32 +23,34 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.example.config.IoTConfig;
 import org.json.JSONObject;
-import org.sample.config.QRadarConfig;
 
 /**
- * Servlet implementation class ConfigureQRadarClient
+ * Servlet implementation class ConfigureIoTSubscriber
  */
-@WebServlet("/ConfigureQRadarClient")
-public class ConfigureQRadarClient extends HttpServlet {
+@WebServlet("/ConfigureIoTSubscriber")
+public class ConfigureIoTSubscriber extends HttpServlet {
 	/**
 	 * @author bkadambi
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ConfigureQRadarClient() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public ConfigureIoTSubscriber() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		response.setContentType("application/json");
 		setAccessControlHeaders(response);
 		try {
@@ -57,29 +59,31 @@ public class ConfigureQRadarClient extends HttpServlet {
 			while ((s = request.getReader().readLine()) != null) {
 				sb.append(s);
 			}
-			System.out.println("Received onfiguration:"+sb.toString());
 			Logger.getLogger(getServletName()).log(Level.INFO,"Received configuration - " + sb.toString());
 			JSONObject req = new JSONObject(sb.toString());
-			// {"ip":"","msgfmt":""}
-			String ipaddress = req.getString("ip");
-			String format = req.getString("msgfmt");
-			QRadarConfig.IP_ADDRESS = ipaddress;
-			QRadarConfig.MSG_FORMAT=format;
-			JSONObject res = new JSONObject();
-			res.put("response","Configured QRadar : " +req.toString());
-			response.getWriter().append(res.toString());
-		} catch (Exception e)
-		{
+			// {"apikey":"","apitoken":"","org":""}
+			String apikey = req.getString("apikey");
+			String token = req.getString("apitoken");
+			String org = req.getString("org");
+			IoTConfig.apikey = apikey;
+			IoTConfig.token = token;
+			IoTConfig.org = org;
+			IoTConfig.buildIoTAppProps();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
+		JSONObject res = new JSONObject();
+		Logger.getLogger(getServletName()).log(Level.INFO,"Applied IoT configuration.");
+		res.put("response", "Applied IoT Configuration Successfully");
+		response.getWriter().append(res.toString());
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
