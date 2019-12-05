@@ -14,7 +14,6 @@
 package org.example.servlet;
 
 import java.io.IOException;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,7 +25,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
-import com.ibm.iotf.client.device.DeviceClient;
+import com.ibm.wiotp.sdk.codecs.JsonCodec;
+import com.ibm.wiotp.sdk.device.DeviceClient;
+import com.ibm.wiotp.sdk.device.config.DeviceConfig;
+import com.ibm.wiotp.sdk.device.config.DeviceConfigAuth;
+import com.ibm.wiotp.sdk.device.config.DeviceConfigIdentity;
+import com.ibm.wiotp.sdk.device.config.DeviceConfigOptions;
 
 /**
  * Servlet implementation class SimulateEvent
@@ -70,19 +74,14 @@ public class SimulateEvent extends HttpServlet {
 			String org = req.getString("org");
 			String deviceType = req.getString("deviceType");
 			String id = req.getString("deviceId");
-			String auth_method = req.getString("authmethod");
 			String auth_token = req.getString("authtoken");
 
-			Properties options = new Properties();
-			
-			options.setProperty("org", org);
-			options.setProperty("type", deviceType);
-			options.setProperty("id", id);
-			options.setProperty("auth-method", auth_method);
-			options.setProperty("auth-token", auth_token);
-			
-
-			DeviceClient client = new DeviceClient(options);
+			DeviceConfigIdentity cfgIdentity = new DeviceConfigIdentity(org, deviceType, id);
+	        DeviceConfigAuth cfgAuth = new DeviceConfigAuth(auth_token);
+	        DeviceConfigOptions cfgOptions= new DeviceConfigOptions();
+	        DeviceConfig cfg = new DeviceConfig(cfgIdentity, cfgAuth, cfgOptions);
+	        DeviceClient client = new DeviceClient(cfg);
+        	client.registerCodec(new JsonCodec());
 
 			JSONObject event = req.getJSONObject("event");
 			System.out.println(event);
