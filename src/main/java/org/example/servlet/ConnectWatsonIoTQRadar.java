@@ -14,7 +14,7 @@
 package org.example.servlet;
 
 import java.io.File;
-import java.io.IOException;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -76,13 +76,14 @@ public class ConnectWatsonIoTQRadar extends HttpServlet {
 			
 			ObjectMapper mapper = new ObjectMapper(new YAMLFactory().disable(Feature.WRITE_DOC_START_MARKER));
 			mapper.findAndRegisterModules();
-			Config config = mapper.readValue(new File("appconfig.yaml"), Config.class);
+			URL fileUrl = getClass().getResource("/appconfig.yaml");
+			Config config = mapper.readValue(new File(fileUrl.getFile()), Config.class);
 			config.getAuth().setKey(IoTConfig.apikey);
 			config.getAuth().setToken(IoTConfig.token);
 			
-			mapper.writeValue(new File("appconfig.yaml"), config);
+			mapper.writeValue(new File(fileUrl.getFile()), config);
 
-			ApplicationClient client = new ApplicationClient("appconfig.yaml");
+			ApplicationClient client = new ApplicationClient(fileUrl.getFile());
 			client.connect();
 			AppEventCallbackJson evtCallback = new AppEventCallbackJson();
 			AppStatusCallback statusCallback = new AppStatusCallback();

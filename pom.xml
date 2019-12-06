@@ -15,14 +15,14 @@
 	<version>1.0</version>
 	<packaging>war</packaging>
 	<build>
-             <resources>
-                 <resource>
-                       <directory>src/main/resources</directory>
-                       <includes>
-                           <include>**/*.yaml</include>
-                       </includes>
-                 </resource>
-	     </resources>		     
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.yaml</include>
+				</includes>
+			</resource>
+		</resources>
 		<pluginManagement>
 			<plugins>
 				<plugin>
