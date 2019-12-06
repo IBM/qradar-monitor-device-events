@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.ibm.wiotp.sdk.codecs.JsonCodec;
 import com.ibm.wiotp.sdk.device.DeviceClient;
 import com.ibm.wiotp.sdk.device.config.DeviceConfig;
@@ -88,8 +90,13 @@ public class SimulateEvent extends HttpServlet {
 
 			client.connect();
 			System.out.println("Client connected");
+			
+			JsonObject evt = new JsonParser().parse(event.toString()).getAsJsonObject();
+			
 
-			client.publishEvent("security", event, 1);
+			boolean success = client.publishEvent("security", evt, 1);
+			
+			System.out.println("Event publish - " +success);
 
 			//client.disconnect();
 
