@@ -76,13 +76,13 @@ public class ConnectWatsonIoTQRadar extends HttpServlet {
 			
 			ObjectMapper mapper = new ObjectMapper(new YAMLFactory().disable(Feature.WRITE_DOC_START_MARKER));
 			mapper.findAndRegisterModules();
-			Config config = mapper.readValue(new File("src/main/resources/appconfig.yaml"), Config.class);
+			Config config = mapper.readValue(new File(getClass().getClassLoader().getResource("appconfig.yaml").getFile()), Config.class);
 			config.getAuth().setKey(IoTConfig.apikey);
 			config.getAuth().setToken(IoTConfig.token);
 			
 			mapper.writeValue(new File("src/main/resources/appconfig.yaml"), config);
 
-			ApplicationClient client = new ApplicationClient("src/main/resources/appconfig.yaml");
+			ApplicationClient client = new ApplicationClient("appconfig.yaml");
 			client.connect();
 			AppEventCallbackJson evtCallback = new AppEventCallbackJson();
 			AppStatusCallback statusCallback = new AppStatusCallback();
