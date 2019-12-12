@@ -250,9 +250,9 @@ Now, we are ready to simulate the events. Go back to the web page again.
 
 Enter all the configuration details shown. Enter the event message in the below formats:
 
-Event with no violation - `{“VEHICLENUMBER":"KA05MA1234", "SPEED": "80KMPH", "VIOLATION":"NONE"}} `  
+Event with no violation - `{"VEHICLENUMBER":"KA05MA1234", "SPEED": "80KMPH", "VIOLATION":"NONE"} `  
  
-Event with a violation - `{“VEHICLENUMBER":"KA05MA1234", "SPEED": "180KMPH", "VIOLATION":"SPEEDING"}} `
+Event with a violation - `{"VEHICLENUMBER":"KA05MA1234", "SPEED": "180KMPH", "VIOLATION":"SPEEDING"} `
 
 > Note: We assume that the speed check is performed at the edge. The key value pair `"VIOLATION":"SPEEDING"` is added on the edge device.
 
